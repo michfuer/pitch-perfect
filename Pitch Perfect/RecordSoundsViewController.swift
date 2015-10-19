@@ -18,20 +18,9 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
     var audioRecorder:AVAudioRecorder!
     var recordedAudio: RecordedAudio!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-    
     override func viewWillAppear(animated: Bool) {
-        recordButton.enabled = true
-        stopButton.hidden = true
-        recordingText.text = "Tap to record"
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        super.viewWillAppear(animated)
+        setUIoriginal()
     }
     
     @IBAction func recordAudio(sender: UIButton) {       
@@ -72,8 +61,21 @@ class RecordSoundsViewController: UIViewController, AVAudioRecorderDelegate {
         if (flag) {
             // Save the recorded audio.
             recordedAudio = RecordedAudio(filePathUrl: recorder.url, title: recorder.url.lastPathComponent!)
-            self.performSegueWithIdentifier("stopRecording", sender: recordedAudio)
+            performSegueWithIdentifier("stopRecording", sender: recordedAudio)
+        } else {
+            // The recording failed. Reset the UI and alert the user.
+            setUIoriginal()
+            println("Recording failed. Please try again.")
         }
+    }
+    
+    /*
+     *  Sets default values for the first scene.
+     */
+    func setUIoriginal() {
+        recordButton.enabled = true
+        stopButton.hidden = true
+        recordingText.text = "Tap to record"
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

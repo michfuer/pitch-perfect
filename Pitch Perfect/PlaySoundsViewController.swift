@@ -36,9 +36,7 @@ class PlaySoundsViewController: UIViewController {
     }
     
     @IBAction func playback(sender: UIButton) {
-        player.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+        resetAudioEngine()
         
         switch sender.tag {
             // The slow button is tagged 0.
@@ -55,14 +53,11 @@ class PlaySoundsViewController: UIViewController {
     }
    
     @IBAction func stopPlayback(sender: UIButton) {
-        player.stop()
-        player.currentTime = 0
+        resetAudioEngine()
     }
     
     func playAudioWithVariablePitch(pitch: Float) {
-        player.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+        resetAudioEngine()
         
         var audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
@@ -78,6 +73,13 @@ class PlaySoundsViewController: UIViewController {
         audioEngine.startAndReturnError(nil)
         
         audioPlayerNode.play()
+    }
+    
+    func resetAudioEngine() {
+        player.stop()
+        audioEngine.stop()
+        audioEngine.reset()
+        player.currentTime = 0
     }
     
     @IBAction func chimpmunkPlayback(sender: UIButton) {
